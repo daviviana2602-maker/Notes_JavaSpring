@@ -1,0 +1,41 @@
+
+@Component
+@RequiredArgsConstructor
+
+public class AdminSeeder implements CommandLineRunner {    // quando minha aplicação terminar de subir, eu vou chamar o método run() dessa classe.
+
+
+    private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
+    @Override                               // sobrescrevendo um método que existe na interface CommandLineRunner
+    public void run(String... args) {
+
+        if (adminRepository.count() > 0) {     // só popula se não tiver populado ainda
+            return;
+        }
+
+
+======== // DAQUI PRA BAIXO APENAS BUILDANDO E SALVANDO USERS \\ ========
+
+        AdminEntity userTest2 = AdminEntity.builder()
+                .name("user")
+                .password(passwordEncoder.encode("User123"))
+                .role(UserRoleEnum.ADMIN)
+                .build();
+
+
+        AdminEntity userTest2 = AdminEntity.builder()
+                .name("user2")
+                .password(passwordEncoder.encode("123User"))
+                .role(UserRoleEnum.ADMIN)
+                .build();
+
+
+        adminRepository.save(adminBack);
+        adminRepository.save(adminFront);
+
+    }
+
+}
