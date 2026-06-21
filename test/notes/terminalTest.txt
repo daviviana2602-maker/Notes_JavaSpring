@@ -1,0 +1,23 @@
+# Rodar todos os testes
+mvn test
+
+
+
+# Limpar build antigo e rodar testes (apaga a pasta target e recompila o projeto do zero)
+mvn clean test
+
+
+
+# Rodar uma classe específica
+mvn -Dtest=NomeDaClasseTest test
+
+    - exemplo:
+    mvn -Dtest=BoardServiceTest test
+
+
+
+# Rodar apenas um método de teste
+mvn -Dtest=NomeDaClasseTest#nomeDoMetodo test
+
+    - exemplo:
+    mvn -Dtest=BoardServiceTest#shouldEditBoardSuccessfully test
