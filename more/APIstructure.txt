@@ -1,0 +1,55 @@
+POST → sem id no request
+-EXEMPLO:
+
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    public CreateBoardResponse generateBoard(
+        @Valid @RequestBody CreateBordRequest createBordRequest
+    )
+    {
+        return createBordService.createBord(
+                createBordRequest.getName(),
+                createBordRequest.getSlug(),
+                createBordRequest.getDescription()
+        );
+    }
+
+
+
+
+PUT/PATCH → id na URL (/{id}) e dados no dto
+-EXEMPLO:
+
+    @PatchMapping("/edit/{boardId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    public EditBoardResponse changeBoard(
+            @PathVariable Long boardId,
+            @Valid @RequestBody EditBoardRequest editBoardRequest
+    )
+    {
+        return editBoardService.editBoard(
+                boardId,
+                editBoardRequest.getName(),
+                editBoardRequest.getSlug(),
+                editBoardRequest.getDescription()
+                );
+    }
+
+
+
+
+DELETE → id na URL (/{id})
+GET por id → id na URL (/{id})
+-EXEMPLO:
+
+    @DeleteMapping("/{boardId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
+    public Long removeBoard(
+            @PathVariable Long boardId
+    )
+    {
+        return deleteBoardService.deleteBoard(boardId);
+    }
