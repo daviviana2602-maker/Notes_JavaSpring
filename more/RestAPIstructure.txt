@@ -70,17 +70,26 @@ public ExampleResponse generateExample(){
     ownershipService.checkOwnership(userId);
 
 
-    // 2. regra de negócio com ifs / existsPending...
+    // 2. validação de dados recebidos;
+    
+
+    // 3. validação de existência e persistência com querys no banco (dados já estarão validados, evitando querys desnecessárias)
+
+    if (existsProductByName(name)) {
+            throw new ConflictException("Product already exists");
+        }
 
 
-    // 3. nova Entity carregando dados
+
+    // 4. nova Entity carregando dados
     UserEntity user = findUserById(userId);
 
 
-    // 4. criar nova Entity
+    // 5. criar nova Entity
     new OrderEntity()
 
 
+    // 6. retornar Dto
     return new ExampleResponse{}
 
 }
