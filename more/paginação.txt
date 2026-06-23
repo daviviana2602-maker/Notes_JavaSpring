@@ -43,6 +43,14 @@ public List<ListThreadsResponse> listThreads(Long boardId, int page) {
     }
 
 
+
+- CASO só quisesse listar itens sem parâmetro algum com paginação:
+
+        Pageable pageable = PageRequest.of(page, 20);
+
+        Page<ThreadEntity> pageThreads = threadsRepository.findAll(pageable);   // pega todos da página, mantendo OFFSET
+
+
 ==============================
 
 
