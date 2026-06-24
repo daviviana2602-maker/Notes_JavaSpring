@@ -70,7 +70,7 @@ public ExampleResponse generateExample(){
     ownershipService.checkOwnership(userId);
 
 
-    // 2. validação de dados recebidos;
+    // 2. validação de dados recebidos (normalização de Strings com .trim() e validações além do Dto);
     
 
     // 3. validação de existência e persistência com querys no banco (dados já estarão validados, evitando querys desnecessárias)
