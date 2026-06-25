@@ -71,9 +71,7 @@ public ExampleResponse generateExample(Long userId, String name, String email) {
     ownershipService.checkOwnership(userId);
 
 
-    // 2. normalização de Strings com .trim()
-    email = email.trim();
-    name = name.trim();
+    // 2. normalização de Strings com .trim() .lenght() .toLowerCase() e outros;
 
 
     // 3. validação de dados recebidos (validações além do Dto);

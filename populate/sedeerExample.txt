@@ -1,5 +1,6 @@
 
 @Component
+@Order(1)     // define a posição em que será populado em relação a outros seeders
 @RequiredArgsConstructor
 
 public class AdminSeeder implements CommandLineRunner {    // quando minha aplicação terminar de subir, eu vou chamar o método run() dessa classe.
