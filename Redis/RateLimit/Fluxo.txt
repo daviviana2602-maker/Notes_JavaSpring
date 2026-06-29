@@ -1,0 +1,35 @@
+=============== RateLimit FLOW ===============
+
+
+- Contador com janela
+
+    "Permitir 5 tentativas de login em 1 minuto"
+
+
+
+- Primeira tentativa:
+
+    INCR login:davi@email.com
+    valor = 1
+
+    SET TTL 60 segundos
+
+
+
+- Depois:
+
+    INCR login:davi@email.com
+    valor = 2
+
+
+
+- Quando:
+
+    valor = 5
+    bloqueia.
+
+
+
+- Após 60s:
+
+    Redis apaga sozinho (reset)

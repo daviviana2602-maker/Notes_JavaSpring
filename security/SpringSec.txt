@@ -46,3 +46,14 @@ Exemplo:
 
 👉 o Spring faz internamente:
 “pega o SecurityContext → verifica role”
+
+
+=============== SecurityConfig ==============
+
+
+- Libera Cookies e rotas
+
+- decide ordem de fatores:
+
+    primeiro rodar JwtFilther
+    depois rodar Redis pra RateLimit

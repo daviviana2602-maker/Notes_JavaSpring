@@ -1,0 +1,33 @@
+=============== Modelo padrão de RateLimit com Redis para Login ===============
+
+
+@Service
+public class RateLimitService {
+
+    private final RedisTemplate<String, String> redisTemplate;
+
+
+    public RateLimitService(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+
+    public boolean allowRequest(String key, int limit, long duration) {
+
+        Long count = redisTemplate      
+                .opsForValue()          // entra no cache
+                .increment(key);        // incrementa o valor da chave e retorna pro count
+
+
+        if (count == 1) {               // quando a chave nasce
+            redisTemplate.expire(
+                    key,                                 // na chave passada ...
+                    Duration.ofSeconds(duration)        // ... insere o TTL duration (tempo de vida da chave)
+            );
+        }
+
+        return count <= limit;        // retorna se o valor de count for menor que o Limit passado
+
+    }
+
+}
