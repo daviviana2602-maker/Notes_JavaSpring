@@ -1,10 +1,25 @@
-Annotations automáticas
+=============== Annotations automáticas ===============
+
 
 @Service, @Controller, @Repository, @Entity @Configuration
 
 “eu achei essa classe, vou criar ela sozinho”
 
 Spring faz tudo automaticamente via scan
+
+
+Na prática:
+
+    @Service
+    é um @Component para regras de negócio.
+
+    @Repository
+    é um @Component para acesso ao banco.
+
+    @Controller`
+    é um @Component para controllers MVC.
+
+Ou seja, todos eles acabam sendo componentes gerenciados pelo Spring.
 
 
 
@@ -26,9 +41,12 @@ Você cria o objeto manualmente e entrega pro Spring
 
 
 
-
 @Transactional
 
-Esse método modifica o banco
+Abre uma transação no banco de dados.
 
-Sempre que modificar o banco (save ou delete) use no método (buscas não precisa)
+Use em métodos que realizam alterações no banco (save, update ou delete).
+
+Se todas as operações forem concluídas com sucesso, a transação é confirmada (commit).
+
+Caso ocorra uma exceção durante a execução, todas as alterações realizadas na transação são desfeitas (rollback), evitando que o banco fique em um estado inconsistente.
