@@ -1,0 +1,28 @@
+=============== Branch / merge ===============
+
+
+- cria branch e já entra nela
+# git checkout -b nome-da-branch
+
+
+- Mostra todas as branches locais
+# git branch 
+
+- Mostra todas as branches locais e remotas
+# git branch -a
+
+
+- trocar de branch
+# git switch nome-da-branch 
+
+
+# git switch main - Primeiro vai pra branch que vai RECEBER as mudanças  (ex: main) 
+# git merge nome-da-branch - Puxa as mudanças da branch  (Você precisa estar na branch destino antes de fazer merge)
+
+
+# git push origin nome-da-branch - enviar branch pro GitHub
+
+
+- após a branch cumprir sua função, apagar a mesma
+git branch -d nome-da-branch - apagar do local
+git push origin --delete nome-da-branch - apagar do remoto  (Github)

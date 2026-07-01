@@ -16,7 +16,7 @@ public class RateLimitService {
 
         Long count = redisTemplate      
                 .opsForValue()          // entra no cache
-                .increment(key);        // incrementa o valor da chave e retorna pro count
+                .increment(key);        // incrementa + 1 na chave e retorna pro count
 
 
         if (count == 1) {               // quando a chave nasce

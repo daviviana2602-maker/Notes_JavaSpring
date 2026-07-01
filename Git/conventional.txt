@@ -1,0 +1,10 @@
+=============== Padrão de commits ===============
+
+
+# ​feat: Criação de uma nova funcionalidade. (Ex: feat: adiciona filtro por data)
+# ​fix: Correção de um bug. (Ex: fix: impede travamento ao enviar formulário vazio)
+# ​refactor: Mudança no código que não corrige bug nem adiciona funcionalidade (melhoria de estrutura).
+# ​docs: Alterações apenas na documentação ou no README.md.
+# ​style: Formatação de código (espaçamentos, ponto e vírgula, etc).
+# ​test: Adição ou correção de testes automatizados.
+# ​chore: Atualizações de tarefas de build, dependências ou configurações
