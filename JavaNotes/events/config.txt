@@ -4,14 +4,21 @@
 @Configuration
 public class RabbitConfig {
 
-    public static final String EMAIL_QUEUE = "email.queue";
-    public static final String ATLAS_EXCHANGE = "atlas.exchange";         // Início do RabbitConfig é onde se dão nomes/valores para os exchanges, queues e routing keys
+    public static final String USER_REGISTERED_QUEUE = "user.registered.queue";
+    public static final String ATLAS_EXCHANGE = "atlas.exchange";         // Início do RabbitConfig é onde se dão nomes/valores para os exchanges, queues, DLQs e routing keys
     public static final String USER_REGISTERED_ROUTING_KEY = "user.registered";
+
+    public static final String USER_REGISTERED_DLQ = "user.registered.dlq";
+    public static final String USER_REGISTERED_DLQ_ROUTING_KEY = "user.registered.dlq";
 
 
     @Bean
-    public Queue emailQueue() {                 // Cria uma queue/fila chamada email.queue
-        return new Queue(EMAIL_QUEUE, true);    // durable = True significa que a FILA sobrevive ao restart do RabbitMQ
+    public Queue userRegisteredQueue() {
+        return QueueBuilder        // Começa a construir/configurar uma Queue
+                .durable(USER_REGISTERED_QUEUE)
+                .deadLetterExchange(ATLAS_EXCHANGE)     // Quando uma mensagem dessa queue virar uma dead letter, encaminhe ela para o atlas.exchange
+                .deadLetterRoutingKey(USER_REGISTERED_DLQ_ROUTING_KEY)      // encaminhe com essa routing key
+                .build();
     }
 
 
@@ -22,11 +29,20 @@ public class RabbitConfig {
 
 
     @Bean
-    public Binding binding(Queue emailQueue, DirectExchange exchange) {    // Quando mensagem no atlas.exchange com a routing key user.registered, mande para email.queue
+    public Binding userRegisteredBinding(Queue userRegisteredQueue, DirectExchange exchange) {    // Quando mensagem no atlas.exchange com a routing key user.registered, mande para email.queue
         return BindingBuilder
-                .bind(emailQueue)                       // ligar essa Queue/Fila
+                .bind(userRegisteredQueue)              // ligar essa Queue/Fila
                 .to(exchange)                           // a esse Exchange
                 .with(USER_REGISTERED_ROUTING_KEY);     // quando a mensagem chegar com a Routing Key: user.registered.
+    }
+
+    
+    @Bean
+    public Binding userRegisteredDlqBinding(Queue userRegisteredDlq, DirectExchange exchange) {
+        return BindingBuilder
+                .bind(userRegisteredDlq)
+                .to(exchange)    // Exchange recebe imediatamente mensagens mortas de userRegisteredQueue com a key abaixo e passa mensagem morta pra userRegisteredDlq
+                .with(USER_REGISTERED_DLQ_ROUTING_KEY);
     }
 
 

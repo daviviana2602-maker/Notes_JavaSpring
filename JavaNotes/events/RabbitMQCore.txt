@@ -1,0 +1,34 @@
+================= RabbitMQ — Conceito =================
+
+
+RabbitMQ é um message broker (intermediário que gerencia a comunicação entre diferentes sistemas, aplicativos ou serviços)
+
+O RabbitMQ não sabe o significado da mensagem, ele apenas transporta a mensagem entre Producer e Consumer.
+
+
+================= Message Words =================
+
+
+    - RabbitMQ: transporta e gerencia as mensagens
+
+    - Producer: publica mensagens (no Exchange)
+    - Queue: fila onde as mensagens aguardam consumo (armazena mensagens)
+    - Consumer: recebe/processa mensagens
+    
+    - Exchange  = recebe a mensagem e decide para onde ela vai (para qual Queue/Fila)
+    - Binding   = regra que liga Exchange → Queue
+    - Routing Key = etiqueta usada na regra do Binding
+
+    - Retry = nova tentativa de processar uma mensagem que falhou.
+    - Backoff = intervalo de espera entre as tentativas de Retry.
+    - ACK = Quando o consumer processa a mensagem com sucesso, o Spring faz o ACK/acknowledgment (remove a mensagem da fila)
+    - DLQ (Dead Letter Queue) = fila para mensagens que falharam várias vezes e não foram processadas
+
+
+================= SpringAMQP e RabbitPanel =================    
+
+
+- Utilizamos o Spring AMQP para a integração entre o Spring e o RabbitMQ.
+
+- O RabbitMQ Panel serve para monitorar e gerenciar o servidor de mensageria RabbitMQ através de uma interface com:
+métricas de desempenho, controle de filas, conexões e segurança do sistema em um único painel acessível pelo navegador
