@@ -3,7 +3,7 @@
 
 Exemplo de uso: 
 
-    - usuário cria conta: Resend está fora do ar, logo o Consumer falha e faz ACK por padrão (remove a mensagem e o email nunca vai ser enviado)
+    - usuário cria conta: Resend está fora do ar, logo o Consumer falha e faz NACK por padrão (remove a mensagem e o email nunca vai ser enviado)
 
     - agora pra resolver precisamos tentar enviar o email novamente x vezes a cada x minutos, sem fazer ACK
     (conforme configuração do Retry no application.yml)
@@ -54,3 +54,9 @@ EXEMPLO DE RETRY CONFIG no application.yml:
     Mas com a CRIAÇÃO DE CONTA o usuário não consegue "tentar denovo", visto que a conta já estará criada,
     isso pode gerar duplicidade de Email/CPF e erro.
     Então podemos salvar as mensagens mortas em uma DLQ e tentar reprocessar as mesmas depois, enviando email para o usuário.
+
+
+- COMO TESTAR DLQs:
+
+    - Mesmo teste de Retry com Backoff pequeno
+    - depois olhar DLQ no RabbitPanel/Queues and Streams ce ver se existe mensagem publicada na DLQ

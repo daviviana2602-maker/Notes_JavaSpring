@@ -16,7 +16,7 @@ public class RabbitConfig {
     public Queue userRegisteredQueue() {
         return QueueBuilder        // Começa a construir/configurar uma Queue
                 .durable(USER_REGISTERED_QUEUE)
-                .deadLetterExchange(ATLAS_EXCHANGE)     // Quando uma mensagem dessa queue virar uma dead letter, encaminhe ela para o atlas.exchange
+                .deadLetterExchange(ATLAS_EXCHANGE)     // Quando uma mensagem dessa queue virar uma dead letter (mensagem morta), encaminhe ela para o atlas.exchange
                 .deadLetterRoutingKey(USER_REGISTERED_DLQ_ROUTING_KEY)      // encaminhe com essa routing key
                 .build();
     }

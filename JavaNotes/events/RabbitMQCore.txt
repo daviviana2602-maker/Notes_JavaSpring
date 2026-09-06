@@ -22,6 +22,7 @@ O RabbitMQ não sabe o significado da mensagem, ele apenas transporta a mensagem
     - Retry = nova tentativa de processar uma mensagem que falhou.
     - Backoff = intervalo de espera entre as tentativas de Retry.
     - ACK = Quando o consumer processa a mensagem com sucesso, o Spring faz o ACK/acknowledgment (remove a mensagem da fila)
+    - NACK = Quando o consumer não processa a mensagem e ela morre (também removida da fila por padrão / requeue = false)
     - DLQ (Dead Letter Queue) = fila para mensagens que falharam várias vezes e não foram processadas
 
 
