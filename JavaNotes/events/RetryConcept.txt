@@ -60,3 +60,25 @@ EXEMPLO DE RETRY CONFIG no application.yml:
 
     - Mesmo teste de Retry com Backoff pequeno
     - depois olhar DLQ no RabbitPanel/Queues and Streams ce ver se existe mensagem publicada na DLQ
+
+
+================= Recovery e Reprocess Flow (Pós mensagem na DLQ) =================      
+
+
+- A mensagem caiu na user.registered.dlq porque o Resend continuou falhando depois dos retries, 
+agora queremos tentar essa mensagem novamente por períodos (1 em 1 hora por exemplo)
+
+
+    Recovery Worker
+        ↓
+    verifica DLQ por períodos
+        ↓
+    pega mensagem
+        ↓
+    publica novamente no atlas.exchange
+        ↓
+    routing key = user.registered
+        ↓
+    user.registered.queue (Binding já direciona)
+        ↓
+    consumer esculta e "consome"    

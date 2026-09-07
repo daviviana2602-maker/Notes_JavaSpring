@@ -29,9 +29,10 @@ exemplos:
 @Scheduled(cron = "0 */10 * * * *")
 
 
-
-Também existe fixedRate:
+- Também existem:
 
     @Scheduled(fixedRate = 60000)
+    executa a cada 90 minutos contando a partir do início da execução anterior
 
-    Executa a cada 60 segundos.
+    @Scheduled(fixedDelay = 90 * 60 * 1000)
+    executa a cada 90 minutos contando depois que a execução anterior termina
