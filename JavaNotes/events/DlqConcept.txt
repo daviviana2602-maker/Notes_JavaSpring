@@ -1,0 +1,102 @@
+================= Dead Letter Queue (DLQ) =================    
+
+
+- A DLQ é uma fila de mensagens mortas para analisar/reprocessar depois
+
+
+- Exemplo de uso:  DLQ pode ser usado pra criação de conta
+
+
+    Quando ocorre tentativa de mudança de senha por exemplo e o Resend está fora do ar por horas/dias,
+    podemos informar para o usuário que o serviço de email está fora e após retorno do Serviço Externo (Resend)
+    o usuário pode tentar trocar senha novamente e receber o email de confirmação.
+
+
+    Mas com a CRIAÇÃO DE CONTA o usuário não consegue "tentar denovo", visto que a conta já estará criada,
+    isso pode gerar duplicidade de Email/CPF e erro.
+    Então podemos salvar as mensagens mortas em uma DLQ e tentar reprocessar as mesmas depois, enviando email para o usuário.
+
+
+- COMO TESTAR DLQs:
+
+    - Mesmo teste de Retry com Backoff pequeno
+    - depois olhar DLQ no RabbitPanel/Queues and Streams ce ver se existe mensagem publicada na DLQ
+
+
+================= Recovery e Reprocess Flow (Pós mensagem na DLQ) =================      
+
+
+- A mensagem caiu na user.registered.dlq porque o Resend continuou falhando depois dos retries, 
+agora queremos tentar reprocessar essa mensagem por períodos (1 em 1 hora por exemplo)
+
+- EXEMPLO DLQ REPROCESS CONFIG:
+
+
+    @Service
+    public class RecoveryDlqMessageService {
+
+
+        private final RabbitTemplate rabbitTemplate;
+
+
+        public RecoveryDlqMessageService(RabbitTemplate rabbitTemplate) {
+            this.rabbitTemplate = rabbitTemplate;
+        }
+
+
+        public void recoverMessages() {
+
+            while (true) {      // continua recuperando/reprocessando mensagens até mandar parar
+
+
+                Boolean recovered = rabbitTemplate.execute(channel -> {    // Executa TUDO IDENTADO ABAIXO utilizando um Channel
+                                    (Channel = canal de comunicação com o RabbitMQ. O channel é o que permite mandar comandos para o RabbitMQ)
+
+
+                    GetResponse response = channel.basicGet(        // Pega uma mensagem da fila
+                            RabbitConfig.USER_REGISTERED_DLQ,       // no caso uma mensagem da DLQ
+                            false                                   // não da ack da DLQ automaticamente
+                    );
+
+
+                    if (response == null) {     // Verifica se não havia mensagem alguma na fila
+                        return null;            (recovered = null)
+                    }
+
+
+                    try {           // Começa a tentativa de republicação.
+
+                        channel.basicPublish(                               // Publica a mensagem novamente.
+                                RabbitConfig.ATLAS_EXCHANGE,                // no atlas.exchange
+                                RabbitConfig.USER_REGISTERED_ROUTING_KEY,   // com a user.registered.routing.key (Binding já passa pra queue)
+                                response.getProps(),                        
+                                response.getBody()           // com o corpo da mensagem original (evento com userId e email originalmente enviado por exemplo)
+                        );
+
+                        
+                        channel.basicAck(                                   // Publicou no Exchange, da ACK da mensagem na DLQ
+                                response.getEnvelope().getDeliveryTag(),    // Identifica qual mensagem deve receber o ACK
+                                false                                       // ACK somente essa mensagem (sem multiple)
+                        );                           
+
+                        return true;        // Recovery dessa mensagem deu certo (recovered = True)
+
+                    } catch (Exception e) {     
+
+                        return false;       // Se a republicação falhar, informa que o Recovery falhou sem dar ACK da DLQ ((recovered = False))
+
+                    }
+                });
+
+
+                if (recovered == null) {
+                    break;      // DLQ vazia para
+                }
+
+                if (!recovered) {
+                    break;      // se recovered = false, falhou ao publicar, para o Recovery
+                }
+
+            }
+        }
+    }
