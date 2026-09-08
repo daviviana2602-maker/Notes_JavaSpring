@@ -40,6 +40,12 @@ Diz pro Spring:
 Você cria o objeto manualmente e entrega pro Spring
 
 
+@Autowired
+
+Injeta dependências.
+
+INJEÇÃO POR CONSTRUTOR é preferível porque deixa as dependências explícitas, permite final (recebe o valor uma vez só) e facilita testes.
+
 
 @Transactional
 
