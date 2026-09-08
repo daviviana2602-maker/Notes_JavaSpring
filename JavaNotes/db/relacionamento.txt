@@ -116,13 +116,15 @@ Define quando o relacionamento será carregado.
 - LAZY
 
 Carrega apenas quando necessário.
+exemplo: pega User e SÓ
 
     @ManyToOne(fetch = FetchType.LAZY)
 
 
 - EAGER
 
-Carrega imediatamente junto da entidade.
+Carrega imediatamente os relacionamentos junto da entidade.
+exemplo: pega User e todos os itens relacionados aquele User
 
     @ManyToOne(fetch = FetchType.EAGER)
 
